@@ -5,6 +5,20 @@
   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.25/datatables.min.css"/>
 </head>
 <body>
+  <h3>Add Amiibo</h3>
+  <form id="amiibo-form">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" required><br><br>
+
+    <label for="series">Series:</label>
+    <input type="text" id="series" name="series" required><br><br>
+
+    <label for="release">Release:</label>
+    <input type="text" id="release" name="release" required><br><br>
+
+    <input type="submit" value="Add">
+  </form>
+
   <table id="amiibo-table" class="display" style="width:100%">
     <thead>
       <tr>
@@ -27,13 +41,30 @@
         dataType: "json",
         success: function(data) {
           // Memasukkan data ke dalam datatable
-          $('#amiibo-table').DataTable({
+          var table = $('#amiibo-table').DataTable({
             data: data.amiibo,
             columns: [
               { data: "name" },
               { data: "series" },
               { data: "release.na" }
             ]
+          });
+
+          // Event listener untuk form submission
+          $("#amiibo-form").submit(function(event) {
+            event.preventDefault();
+
+            // Mendapatkan nilai dari input field
+            var name = $("#name").val();
+            var series = $("#series").val();
+            var release = $("#release").val();
+
+            // Menambahkan data baru ke dalam datatable
+            var rowData = { name: name, series: series, release: { na: release } };
+            table.row.add(rowData).draw();
+
+            // Reset form setelah submit
+            $("#amiibo-form")[0].reset();
           });
         }
       });
