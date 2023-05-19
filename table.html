@@ -55,7 +55,7 @@
               { data: "name" },
               { data: "brewery_type" },
               { data: "city" },
-              { data: "state" },
+              { data: "state_province" },
               { data: "country" }
             ]
           });
@@ -71,8 +71,20 @@
             var state = $("#state").val();
             var country = $("#country").val();
 
+            // Validasi form sebelum menambahkan data
+            if (name === "" || brewery_type === "" || city === "" || state === "" || country === "") {
+              alert("Harap lengkapi semua field");
+              return;
+            }
+
             // Menambahkan data baru ke dalam datatable
-            var rowData = [name, brewery_type, city, state, country];
+            var rowData = {
+                "name":name,
+                "brewery_type":brewery_type,
+                "city":city,
+                "state_province":state,
+                "country":country
+            }
             table.row.add(rowData).draw();
 
             // Reset form setelah submit
