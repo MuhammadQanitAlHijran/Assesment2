@@ -5,11 +5,31 @@
   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.25/datatables.min.css"/>
 </head>
 <body>
+  <h3>Add Brewery</h3>
+  <form id="brewery-form">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" required><br><br>
+
+    <label for="brewery_type">Brewery Type:</label>
+    <input type="text" id="brewery_type" name="brewery_type" required><br><br>
+
+    <label for="city">City:</label>
+    <input type="text" id="city" name="city" required><br><br>
+
+    <label for="state">State:</label>
+    <input type="text" id="state" name="state" required><br><br>
+
+    <label for="country">Country:</label>
+    <input type="text" id="country" name="country" required><br><br>
+
+    <input type="submit" value="Add">
+  </form>
+
   <table id="breweries-table" class="display" style="width:100%">
     <thead>
       <tr>
         <th>Name</th>
-        <th>Type</th>
+        <th>Brewery Type</th>
         <th>City</th>
         <th>State</th>
         <th>Country</th>
@@ -29,7 +49,7 @@
         dataType: "json",
         success: function(data) {
           // Memasukkan data ke dalam datatable
-          $('#breweries-table').DataTable({
+          var table = $('#breweries-table').DataTable({
             data: data,
             columns: [
               { data: "name" },
@@ -38,6 +58,25 @@
               { data: "state" },
               { data: "country" }
             ]
+          });
+
+          // Event listener untuk form submission
+          $("#brewery-form").submit(function(event) {
+            event.preventDefault();
+
+            // Mendapatkan nilai dari input field
+            var name = $("#name").val();
+            var brewery_type = $("#brewery_type").val();
+            var city = $("#city").val();
+            var state = $("#state").val();
+            var country = $("#country").val();
+
+            // Menambahkan data baru ke dalam datatable
+            var rowData = [name, brewery_type, city, state, country];
+            table.row.add(rowData).draw();
+
+            // Reset form setelah submit
+            $("#brewery-form")[0].reset();
           });
         }
       });
