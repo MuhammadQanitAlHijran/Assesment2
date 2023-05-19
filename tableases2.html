@@ -8,7 +8,8 @@
   <h3>Add Amiibo</h3>
   <form id="amiibo-form">
     <label for="name">Name:</label>
-    <input type="text" id="name" name="name" required><br><br>
+    <input type="text" id="name" name="name" required><br>
+    <span id="name-error" style="color: red;"></span><br><br>
 
     <label for="series">Series:</label>
     <input type="text" id="series" name="series" required><br><br>
@@ -59,12 +60,29 @@
             var series = $("#series").val();
             var release = $("#release").val();
 
+            // Validasi nama agar tidak sama
+            var duplicateName = false;
+            table.rows().every(function() {
+              var rowData = this.data();
+              if (rowData.name.toLowerCase() === name.toLowerCase()) {
+                duplicateName = true;
+                return false; // Hentikan perulangan jika nama sudah sama
+              }
+            });
+
+            // Jika nama sama, tampilkan pesan error
+            if (duplicateName) {
+              $("#name-error").text("Name must be unique");
+              return; // Hentikan proses submit
+            }
+
             // Menambahkan data baru ke dalam datatable
             var rowData = { name: name, series: series, release: { na: release } };
             table.row.add(rowData).draw();
 
-            // Reset form setelah submit
+            // Reset form dan pesan error setelah submit
             $("#amiibo-form")[0].reset();
+            $("#name-error").text("");
           });
         }
       });
